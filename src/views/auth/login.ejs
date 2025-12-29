@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <section class="login-container">
+      <div class="login-box">
+        <div id="login-header">Welcome Back ! Login Here.</div>
+        <form action="/api/auth/login" id="login-form" method="POST">
+          <input type="email" name="email" id="email" placeholder="Email" />
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Password"
+          />
+          <button type="submit">login</button>
+        </form>
+        <div class="refer">
+          Don't Have Account <a href="/register">Register Here.</a>
+        </div>
+        <div class="flesh" id="flesh-msg"></div>
+      </div>
+    </section>
+    <script type="module" src="/js/validate.js"></script>
+  </body>
+</html>

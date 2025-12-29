@@ -17,7 +17,8 @@ const register = async (req, res) => {
 
     await user_service.createUser(name, email, hashedPassword);
 
-    return jsonSuccess(res, 200, "User Registered Successfully");
+    // return jsonSuccess(res, 200, "User Registered Successfully");
+    return res.redirect("/login");
   } catch (error) {
     console.error(`Error while Register User : ${error}`);
     jsonError(res, 500, "Internal Server Error");
@@ -51,7 +52,8 @@ const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return jsonSuccess(res, 200, "User logged in Successfully");
+    // return jsonSuccess(res, 200, "User logged in Successfully");
+    return res.redirect("/");
   } catch (error) {
     console.error(`Error while Login User : ${error}`);
     jsonError(res, 500, "Internal Server Error");
