@@ -1,6 +1,4 @@
-const bcrypt = require("bcrypt");
-
-const { jsonSuccess, jsonError } = require("../utilities/response");
+const { renderError, renderSuccess } = require("../utilities/response");
 const user_service = require("../services/user");
 const { generateAccessToken } = require("../utilities/jwt");
 
@@ -11,17 +9,22 @@ const register = async (req, res) => {
     const userExists = await user_service.findUser(email);
 
     if (userExists) {
-      return jsonError(res, 409, "Email Already Exists");
+      return renderError(res, "auth/login", "Register", "Email Already Exists");
     }
     const hashedPassword = await user_service.hashedPassword(password);
 
     await user_service.createUser(name, email, hashedPassword);
 
-    // return jsonSuccess(res, 200, "User Registered Successfully");
-    return res.redirect("/login");
+    return renderSuccess(
+      res,
+      "auth/register",
+      "Register",
+      "Registration SuccessFull.login now..",
+      { error: null }
+    );
   } catch (error) {
     console.error(`Error while Register User : ${error}`);
-    jsonError(res, 500, "Internal Server Error");
+    return renderError(res, "pages/500", "Error", "Internal Server Error");
   }
 };
 
@@ -32,7 +35,7 @@ const login = async (req, res) => {
     const userExists = await user_service.findUser(email);
 
     if (!userExists) {
-      return jsonError(res, 404, "Email Not Found");
+      return renderError(res, "auth/login", "login", "Email Not Found");
     }
     const isPasswordMatched = await user_service.matchPassword(
       password,
@@ -40,7 +43,7 @@ const login = async (req, res) => {
     );
 
     if (!isPasswordMatched) {
-      return jsonError(res, 403, "Invalid Credentials");
+      return renderError(res, "auth/login", "login", "Invalid Credentials");
     }
 
     const accessToken = generateAccessToken(userExists);
@@ -48,15 +51,14 @@ const login = async (req, res) => {
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: false,
-      sameSite: "none",
+      sameSite: "LAX",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    // return jsonSuccess(res, 200, "User logged in Successfully");
     return res.redirect("/");
   } catch (error) {
     console.error(`Error while Login User : ${error}`);
-    jsonError(res, 500, "Internal Server Error");
+    return renderError(res, "pages/500", "Error", "Internal Server Error");
   }
 };
 

@@ -24,6 +24,9 @@
           Don't Have Account <a href="/register">Register Here.</a>
         </div>
         <div class="flesh" id="flesh-msg"></div>
+        <% if(error) { %>
+        <div class="flesh error" id="backend-error"><%=error%></div>
+        <%}%>
       </div>
     </section>
     <script type="module" src="/js/validate.js"></script>

@@ -1,6 +1,23 @@
 const loginForm = document.getElementById("login-form");
 const fleshMsg = document.getElementById("flesh-msg");
 const registerForm = document.getElementById("register-form");
+const addProductForm = document.getElementById("add-product-form");
+const backendError = document.getElementById("backend-error");
+const backendSuccess = document.getElementById("backend-success");
+if (backendError) {
+  backendError.style.display = "block";
+  setTimeout(() => {
+    backendError.style.display = "none";
+  }, 1500);
+}
+
+if (backendSuccess) {
+  backendSuccess.style.display = "block";
+  setTimeout(() => {
+    backendSuccess.style.display = "none";
+  }, 1500);
+}
+
 if (loginForm) {
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -44,6 +61,35 @@ if (registerForm) {
     }
 
     registerForm.submit();
+  });
+}
+
+if (addProductForm) {
+  addProductForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const productName = document.getElementById("productName").value.trim();
+    const stock = document.getElementById("stock").value.trim();
+    const price = document.getElementById("price").value.trim();
+    const description = document.getElementById("description").value.trim();
+
+    if (!productName) {
+      showFlesh("Product Name is required!", "error");
+      return;
+    }
+    if (!description) {
+      showFlesh("description is required!", "error");
+      return;
+    }
+    if (!stock) {
+      showFlesh("Stock is required!", "error");
+      return;
+    }
+    if (!price) {
+      showFlesh("Price is required!", "error");
+      return;
+    }
+    console.log(productName, description, stock, price);
+    addProductForm.submit();
   });
 }
 

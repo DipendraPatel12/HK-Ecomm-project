@@ -1,0 +1,44 @@
+<section class="add-product-container">
+  <div class="add-product-box">
+    <div id="add-product-header">Add Product</div>
+    <form
+      action="/admin/api/add-product"
+      id="add-product-form"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <div class="flex-items">
+        <input
+          type="text"
+          name="productName"
+          id="productName"
+          placeholder="Product"
+        />
+        <select name="category" id="category">
+          <option value="">Select Category</option>
+
+          <% categories.forEach((c) => { %>
+          <option value="<%= c.id %>"><%= c.category %></option>
+          <% }) %>
+        </select>
+      </div>
+      <textarea
+        name="description"
+        id="description"
+        placeholder="description"
+        rows="5"
+        cols="47"
+      ></textarea>
+      <div class="flex-items">
+        <input type="number" name="stock" id="stock" placeholder="Stock" />
+        <input type="number" name="price" id="price" placeholder="Price" />
+      </div>
+      <input type="file" name="image" id="image" />
+
+      <button type="submit">Upload</button>
+    </form>
+
+    <div class="flesh" id="flesh-msg"></div>
+  </div>
+</section>
+<script type="module" src="/js/validate.js"></script>

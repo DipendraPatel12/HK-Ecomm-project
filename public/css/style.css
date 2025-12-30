@@ -5,7 +5,8 @@ body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 .login-container,
-.register-container {
+.register-container,
+.add-product-container {
   background-color: rgb(224, 233, 230);
   min-height: 100vh;
   display: flex;
@@ -13,7 +14,8 @@ body {
   justify-content: center;
 }
 .login-box,
-.register-box {
+.register-box,
+.add-product-box {
   min-height: 50vh;
   background-color: rgb(246, 239, 239);
   display: flex;
@@ -27,7 +29,8 @@ body {
   box-shadow: 0px 0px 2px;
 }
 #login-form,
-#register-form {
+#register-form,
+#add-product-form {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,8 +44,33 @@ body {
   border: 1px solid gray;
   border-radius: 10px;
 }
+
+#add-product-form input {
+  min-width: 350px;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 10px;
+}
+
+#add-product-form > .flex-items > input[name="stock"],
+#add-product-form > .flex-items > input[name="price"],
+#add-product-form > .flex-items > input[name="productName"] {
+  min-width: 30px;
+}
+
+#add-product-form > .flex-items > select {
+  border-radius: 10px;
+  padding: 2px;
+  width: 180px;
+}
+
+textarea {
+  padding: 5px;
+  border-radius: 10px;
+}
 #login-form button,
-#register-form button {
+#register-form button,
+#add-product-form button {
   width: 100px;
   padding: 10px;
   border: 1px solid gray;
@@ -51,10 +79,14 @@ body {
 }
 
 #login-header,
-#register-header {
+#register-header,
+#add-product-header {
   font-size: 22px;
 }
-
+.flex-items {
+  display: flex;
+  gap: 5px;
+}
 .flesh {
   display: none;
 }

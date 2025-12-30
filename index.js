@@ -5,9 +5,8 @@ const port = process.env.PORT;
 const app = express();
 const expressEjsLayouts = require("express-ejs-layouts");
 const cookieParser = require("cookie-parser");
-const authRoutes = require("./src/routes/auth");
 const path = require("path");
-const { title } = require("process");
+const index = require("./src/routes/index");
 
 app.use(expressEjsLayouts);
 app.use(express.json());
@@ -19,19 +18,8 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "src/views"));
 app.set("layout", "layout/main");
 
-app.get("/", (req, res) => {
-  return res.render("pages/home", { title: "Home" });
-});
-
-app.get("/login", (req, res) => {
-  return res.render("auth/login", { layout: false, title: "Login" });
-});
-
-app.get("/register", (req, res) => {
-  return res.render("auth/register", { layout: false, title: "Register" });
-});
-
-app.use("/api/auth", authRoutes);
+app.use("/", index.authRoutes);
+app.use("/admin", index.adminRoutes);
 
 db.sequelize
   .authenticate()

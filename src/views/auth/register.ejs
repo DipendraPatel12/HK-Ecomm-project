@@ -25,6 +25,11 @@
           Already Have Account ?<a href="/login">login</a>
         </div>
         <div class="flesh" id="flesh-msg"></div>
+        <% if (error) { %>
+        <div class="flash error" id="backend-error"><%= error %></div>
+        <% } %> <% if (success) { %>
+        <div class="flash success" id="backend-success"><%= success %></div>
+        <% } %>
       </div>
     </section>
     <script type="module" src="/js/validate.js"></script>
