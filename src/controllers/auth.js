@@ -62,4 +62,17 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const logout = async (req, res) => {
+  try {
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      sameSite: "LAX",
+    });
+
+    res.redirect("/");
+  } catch (error) {
+    console.error(`Error while Logout : ${error}`);
+    return renderError(res, "pages/500", "Error", "Internal Server Error");
+  }
+};
+module.exports = { register, login, logout };

@@ -11,10 +11,12 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Product.belongsTo(models.Category, {
         foreignKey: "categoryId",
-        as: "category", 
+        as: "category",
         onDelete: "SET NULL",
         onUpdate: "CASCADE",
       });
+
+      Product.hasMany(models.CartItem, { foreignKey: "productId" });
     }
   }
   Product.init(

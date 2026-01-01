@@ -1,0 +1,87 @@
+<style>
+  .detail-container {
+    min-height: 80vh;
+    background-color: whitesmoke;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+</style>
+<section class="detail-container">
+  <div class="row" style="width: 100%">
+    <div class="col-md-6 text-center">
+      <img
+        src="<%= product.image || 'https://via.placeholder.com/400x400' %>"
+        class="img-fluid rounded"
+        alt="<%= product.productName %>"
+        style="height: 500px; object-fit: cover"
+      />
+    </div>
+
+    <div class="col-md-6">
+      <h2 class="mb-3"><%= product.productName %></h2>
+      <p class="text-muted mb-3"><%= product.description %></p>
+      <h4 class="text-primary mb-4">$<%= product.price %></h4>
+
+      <div class="d-flex align-items-center mb-3">
+        <button
+          class="btn btn-outline-secondary btn-sm me-2"
+          type="button"
+          id="decrement"
+        >
+          -
+        </button>
+        <input
+          type="text"
+          id="quantity"
+          class="form-control text-center"
+          value="1"
+          style="width: 60px"
+        />
+        <button
+          class="btn btn-outline-secondary btn-sm ms-2"
+          type="button"
+          id="increment"
+        >
+          +
+        </button>
+      </div>
+
+      <!-- Add to Cart Button -->
+      <button
+        class="btn btn-success btn-lg"
+        onclick="addToCart(<%=product.id%>)"
+      >
+        Add to Cart
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  const incrementBtn = document.getElementById("increment");
+  const decrementBtn = document.getElementById("decrement");
+  const quantityInput = document.getElementById("quantity");
+
+  incrementBtn.addEventListener("click", () => {
+    quantityInput.value = parseInt(quantityInput.value || 1) + 1;
+  });
+
+  decrementBtn.addEventListener("click", () => {
+    quantityInput.value = Math.max(1, parseInt(quantityInput.value || 1) - 1);
+  });
+
+  async function addToCart(productId) {
+    const res = await fetch("/cart/addToCart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ productId, quantity: quantityInput.value }),
+    });
+
+    const data = await res.json();
+    alert(data.message);
+  }
+</script>

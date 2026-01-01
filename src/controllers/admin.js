@@ -1,10 +1,11 @@
+const adminService = require("../services/admin");
 const { Category } = require("../models/index");
 const { renderSuccess, renderError } = require("../utilities/response");
 
 const addProductPage = async (req, res) => {
   try {
     const categories = await Category.findAll();
-    return renderSuccess(res, "admin/addProduct", "Add Product",null,{
+    return renderSuccess(res, "admin/addProduct", "Add Product", null, {
       categories,
     });
   } catch (error) {
@@ -31,24 +32,14 @@ const addCategory = async (req, res) => {
     return renderError(res, "pages/500", "error", "Internal Server Error");
   }
 };
-const { Product } = require("../models");
 const addProduct = async (req, res) => {
   try {
-    const {
-      productName,
-      stock,
-      price,
-      description,
-      category: categoryId,
-    } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
-    await Product.create({
-      productName,
-      stock,
-      price,
-      description,
-      categoryId,
+
+    await adminService.productAdd({
+      ...req.body,
       image,
+      categoryId: req.body.category,
     });
     return res.redirect("/");
   } catch (error) {

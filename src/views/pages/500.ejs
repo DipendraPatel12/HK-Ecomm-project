@@ -1,5 +1,13 @@
-<section>
-  <div>
-    <h1><%=error%></h1>
+
+<div class="bg-light d-flex align-items-center justify-content-center vh-100">
+  <div class="card shadow-sm text-center p-4" style="min-width: 600px">
+    <div class="card-body">
+      <h1 class="display-4 text-danger">500</h1>
+      <h5 class="mb-3">Internal Error</h5>
+
+      <p class="text-muted"><%= error || "Internal Server Error" %></p>
+
+      <a href="/" class="btn btn-primary mt-3">Go Home</a>
+    </div>
   </div>
-</section>
+</div>

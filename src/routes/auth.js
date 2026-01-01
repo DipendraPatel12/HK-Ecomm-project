@@ -2,16 +2,24 @@ const express = require("express");
 
 const validate = require("../middlewares/validate");
 const { signupSchema, loginSchema } = require("../utilities/validateBody");
-const { register, login } = require("../controllers/auth");
+const { register, login, logout } = require("../controllers/auth");
 const router = express.Router();
-
-router.get("/", (req, res) => {
-  return res.render("pages/home", { title: "Home" });
-});
+const { Product, Category } = require("../models");
+const { renderSuccess } = require("../utilities/response");
+const index = require("../controllers/index");
+// router.get("/", async (req, res) => {
+//   const products = await Product.findAll();
+//   const categories = await Category.findAll();
+//   // return res.render("pages/home", { title: "Home", products });
+//   return renderSuccess(res, "pages/home", "Ecom", null, {
+//     products,
+//     categories,
+//   });
+// });
+router.get("/", index.productController.getProducts);
 
 router.get("/login", (req, res) => {
   return res.render("auth/login", {
-    layout: false,
     error: null,
     title: "Login",
   });
@@ -19,7 +27,6 @@ router.get("/login", (req, res) => {
 
 router.get("/register", (req, res) => {
   return res.render("auth/register", {
-    layout: false,
     error: null,
     success: null,
     title: "Register",
@@ -28,5 +35,6 @@ router.get("/register", (req, res) => {
 
 router.post("/api/auth/register", validate(signupSchema), register);
 router.post("/api/auth/login", validate(loginSchema), login);
+router.post("/api/auth/logout", logout);
 
 module.exports = router;

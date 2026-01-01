@@ -7,12 +7,14 @@ const expressEjsLayouts = require("express-ejs-layouts");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const index = require("./src/routes/index");
+const attachUser = require("./src/middlewares/attachUser");
 
 app.use(expressEjsLayouts);
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(attachUser);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "src/views"));
@@ -20,6 +22,9 @@ app.set("layout", "layout/main");
 
 app.use("/", index.authRoutes);
 app.use("/admin", index.adminRoutes);
+app.use("/product", index.productRoutes);
+app.use("/cart", index.cartRoutes);
+app.use("/user", index.userRoutes);
 
 db.sequelize
   .authenticate()
