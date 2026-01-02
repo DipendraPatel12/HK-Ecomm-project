@@ -1,7 +1,7 @@
 <div class="container my-5">
   <h2>Checkout</h2>
 
-  <ul class="list-group d-flex justify-content-between mb-3">
+  <ul class="list-group mb-3 m-auto">
     <% cartItems.forEach(item => { %>
     <li class="list-group-item d-flex justify-content-between w-50">
       <span> <%= item.Product.productName %> (x<%= item.quantity %>) </span>
@@ -12,7 +12,7 @@
 
   <h4>Total: $<%= total.toFixed(2) %></h4>
 
-  <form action="/cart/api/checkout" method="POST">
+  <form action="/user/create-payment" method="POST">
     <button class="btn btn-success mt-3">Confirm Order</button>
   </form>
 </div>

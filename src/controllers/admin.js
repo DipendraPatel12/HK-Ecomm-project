@@ -4,7 +4,7 @@ const { renderSuccess, renderError } = require("../utilities/response");
 
 const addProductPage = async (req, res) => {
   try {
-    const categories = await Category.findAll();
+    const categories = await adminService.findAllCategory();
     return renderSuccess(res, "admin/addProduct", "Add Product", null, {
       categories,
     });
@@ -25,7 +25,7 @@ const addCategoryPage = async (req, res) => {
 
 const addCategory = async (req, res) => {
   try {
-    await Category.create(req.body);
+    await adminService.createCategory(req.body);
     return res.redirect("/");
   } catch (error) {
     console.error(`Error While Adding Category : ${error}`);

@@ -1,3 +1,4 @@
+const session = require("express-session");
 const express = require("express");
 const db = require("./src/models");
 require("dotenv").config({ quiet: true });
@@ -9,6 +10,14 @@ const path = require("path");
 const index = require("./src/routes/index");
 const attachUser = require("./src/middlewares/attachUser");
 
+app.use(
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 1 day
+  })
+);
 app.use(expressEjsLayouts);
 app.use(express.json());
 app.use(cookieParser());

@@ -1,13 +1,34 @@
+const { Op } = require("sequelize");
 const { renderError, renderSuccess } = require("../utilities/response");
-const { Product, Category } = require("../models");
+const { Product, Category, User } = require("../models");
 const { where } = require("sequelize");
-
+const adminService = require("../services/admin");
 const productDetailPage = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await Product.findOne({ where: { id } });
+    // const product = await Product.findOne({ where: { id } });
+    const product = await Product.findOne({
+      where: { id },
+      include: [
+        {
+          model: Review,
+          include: [
+            {
+              model: User,
+              attributes: ["id", "name"],
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!product) {
+      return renderError(res, "pages/404", "Not Found", "Product not found");
+    }
+    const reviews = product.Reviews || [];
     return renderSuccess(res, "pages/productDetail", "Product", null, {
       product,
+      reviews,
     });
   } catch (error) {
     console.error(`Error While Rendering Product Detail Page : ${error}`);
@@ -15,21 +36,9 @@ const productDetailPage = async (req, res) => {
   }
 };
 
-const cart = async (req, res) => {
-  try {
-    const cart = [{}];
-    return renderSuccess(res, "pages/cart", "Cart", null, { cart });
-  } catch (error) {
-    console.error(`Error While Rendering Cart Page : ${error}`);
-    return renderError(res, "pages/500", "Error", "Internal Server Error");
-  }
-};
-
-const { Op } = require("sequelize");
-
 const getProducts = async (req, res) => {
   try {
-    const { page = 1, limit = 5, categoryId, price, query } = req.query;
+    const { page = 1, limit = 8, categoryId, price, query } = req.query;
 
     const pageNumber = parseInt(page);
     const pageLimit = parseInt(limit);
@@ -41,10 +50,9 @@ const getProducts = async (req, res) => {
       where.categoryId = categoryId;
     }
 
-
     if (query) {
       where.productName = {
-        [Op.like]: `%${query}%`, 
+        [Op.like]: `%${query}%`,
       };
     }
 
@@ -59,7 +67,7 @@ const getProducts = async (req, res) => {
       order,
     });
 
-    const categories = await Category.findAll();
+    const categories = await adminService.findAllCategory();
 
     return renderSuccess(res, "pages/home", "Home", null, {
       totalProducts: count,
@@ -77,4 +85,24 @@ const getProducts = async (req, res) => {
   }
 };
 
-module.exports = { productDetailPage, cart, getProducts };
+const { Review } = require("../models");
+
+const postReview = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const { comment } = req.body;
+    const userId = req.user.id;
+
+    await Review.create({
+      productId,
+      userId,
+      comment,
+    });
+    return res.redirect(`/product/detail/${productId}`);
+  } catch (error) {
+    console.error("Error submitting review:", error);
+    return res.redirect(`/product/detail/${productId}`);
+  }
+};
+
+module.exports = { productDetailPage, getProducts, postReview };

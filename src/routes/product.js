@@ -1,9 +1,7 @@
 const express = require("express");
-const productDetailPage = require("../controllers/product");
 const router = express.Router();
 const index = require("../controllers/index");
 router.get("/products", index.productController.getProducts);
 router.get("/detail/:id", index.productController.productDetailPage);
-router.get("/cart", index.productController.cart);
-
+router.post("/:productId/review", index.productController.postReview);
 module.exports = router;

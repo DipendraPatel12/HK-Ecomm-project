@@ -54,6 +54,7 @@ const login = async (req, res) => {
       sameSite: "LAX",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+    await user_service.mergeGuestCartToUserCart(req, userExists.id);
 
     return res.redirect("/");
   } catch (error) {

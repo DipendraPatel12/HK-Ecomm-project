@@ -1,18 +1,8 @@
-<style>
-  .detail-container {
-    min-height: 80vh;
-    background-color: whitesmoke;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-  }
-</style>
 <section class="detail-container">
   <div class="row" style="width: 100%">
     <div class="col-md-6 text-center">
       <img
-        src="<%= product.image || 'https://via.placeholder.com/400x400' %>"
+        src="<%= product.image %>"
         class="img-fluid rounded"
         alt="<%= product.productName %>"
         style="height: 500px; object-fit: cover"
@@ -48,7 +38,6 @@
         </button>
       </div>
 
-      <!-- Add to Cart Button -->
       <button
         class="btn btn-success btn-lg"
         onclick="addToCart(<%=product.id%>)"
@@ -58,30 +47,53 @@
     </div>
   </div>
 </section>
+<div class="container my-5">
+  <% if (locals.user) { %>
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Leave a Review</h5>
 
-<script>
-  const incrementBtn = document.getElementById("increment");
-  const decrementBtn = document.getElementById("decrement");
-  const quantityInput = document.getElementById("quantity");
+      <form action="/product/<%= product.id %>/review" method="POST">
+        <div class="mb-3">
+          <label class="form-label">Your Review</label>
+          <textarea
+            name="comment"
+            class="form-control"
+            rows="4"
+            placeholder="Write your review..."
+            required
+          ></textarea>
+        </div>
 
-  incrementBtn.addEventListener("click", () => {
-    quantityInput.value = parseInt(quantityInput.value || 1) + 1;
-  });
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+      </form>
+    </div>
+  </div>
+  <% } else { %>
+  <div class="alert alert-info">
+    <a href="/login" class="alert-link">Login</a> to leave a review.
+  </div>
+  <% } %>
+</div>
+<div class="container mb-5">
+  <h4 class="mb-4">Customer Reviews (<%= reviews.length %>)</h4>
 
-  decrementBtn.addEventListener("click", () => {
-    quantityInput.value = Math.max(1, parseInt(quantityInput.value || 1) - 1);
-  });
+  <% if (reviews.length === 0) { %>
+  <div class="alert alert-secondary">No reviews yet.</div>
+  <% } else { %> <% reviews.forEach(review => { %>
+  <div class="card mb-3 shadow-sm">
+    <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <strong><%= review.User.name %></strong>
+        <small class="text-muted">
+          <%= review.createdAt.toDateString() %>
+        </small>
+      </div>
 
-  async function addToCart(productId) {
-    const res = await fetch("/cart/addToCart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ productId, quantity: quantityInput.value }),
-    });
+      <p class="mt-2 mb-0"><%= review.comment %></p>
+    </div>
+  </div>
+  <% }) %> <% } %>
+</div>
 
-    const data = await res.json();
-    alert(data.message);
-  }
-</script>
+<script type="module" src="/js/productdetail.js"></script>

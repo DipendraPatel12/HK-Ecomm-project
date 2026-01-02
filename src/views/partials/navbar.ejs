@@ -12,7 +12,6 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-      <!-- Center search form -->
       <form class="d-flex mx-auto" action="/" id="searchForm">
         <input
           class="form-control"
@@ -21,18 +20,27 @@
           aria-label="Search"
           id="searchInput"
           name="query"
+          value="<%=query%>"
         />
       </form>
 
-      <!-- Right aligned items -->
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" href="/cart">
-            <i class="bi bi-cart"></i>
+            <i class="bi bi-cart"
+              ><sup>
+                <span id="cartCountBadge" class="badge bg-danger"
+                  ><%=counts%></span
+                >
+              </sup>
+            </i>
           </a>
         </li>
 
         <% if (user) { %> <% if (user.role === "admin") { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/add-category">Add category</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" href="/admin/add-product">Add Product</a>
         </li>
@@ -52,17 +60,5 @@
     </div>
   </div>
 </nav>
-<script>
-  const input = document.getElementById("searchInput");
-  const form = document.getElementById("searchForm");
 
-  let debounceTimer;
-
-  input.addEventListener("input", () => {
-    clearTimeout(debounceTimer);
-
-    debounceTimer = setTimeout(() => {
-      form.submit();
-    }, 500);
-  });
-</script>
+<script type="module" src="/js/navbar.js"></script>

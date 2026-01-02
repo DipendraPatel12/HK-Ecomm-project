@@ -1,5 +1,5 @@
 <div class="container my-5">
-  <h2>Order #<%= order.id %></h2>
+  <h2>Order Id : <%= order.id %></h2>
 
   <ul class="list-group mb-3">
     <% order.OrderItems.forEach(item => { %>
@@ -12,4 +12,5 @@
 
   <h4>Total: $<%= order.totalAmount %></h4>
   <p>Status: <strong><%= order.status %></strong></p>
+  <a href="/" class="btn btn-primary"> Home </a>
 </div>

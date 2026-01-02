@@ -19,7 +19,6 @@ const createUser = async (name, email, password) => {
   }
 };
 
-
 const hashedPassword = async (password) => {
   try {
     return await bcrypt.hash(password, 10);
@@ -37,4 +36,39 @@ const matchPassword = async (password, userPassword) => {
     throw error;
   }
 };
-module.exports = { findUser, createUser, hashedPassword, matchPassword };
+
+const { CartItem } = require("../models");
+const mergeGuestCartToUserCart = async (req, userId) => {
+  const sessionCart = req.session?.cart;
+
+  if (!sessionCart) return;
+
+  for (const productId in sessionCart) {
+    const quantity = sessionCart[productId];
+
+    const existingItem = await CartItem.findOne({
+      where: { userId, productId },
+    });
+
+    if (existingItem) {
+      existingItem.quantity += quantity;
+      await existingItem.save();
+    } else {
+      await CartItem.create({
+        userId,
+        productId,
+        quantity,
+      });
+    }
+  }
+
+  req.session.cart = {};
+};
+
+module.exports = {
+  findUser,
+  createUser,
+  hashedPassword,
+  matchPassword,
+  mergeGuestCartToUserCart,
+};
